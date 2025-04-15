@@ -1,0 +1,92 @@
+plugins {
+    id 'com.android.application'
+    id 'jacoco'
+}
+
+//apply plugin: 'info.solidsoft.pitest'
+
+android {
+    namespace 'com.kxzhu.datehelper'
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.kxzhu.datehelper"
+        minSdk 24
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug { // 为构建类型启用了覆盖率
+            testCoverageEnabled true // 2. 为 debug 构建类型启用覆盖率
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+                // jvmArgs = ['-Xmx512m'] // 如果测试需要更多内存
+            }
+        }
+    }
+}
+
+tasks.register('jacocoUnitTestReport', JacocoReport) {
+    dependsOn 'testDebugUnitTest' // 确保单元测试先执行
+
+    reports {
+        xml.required = true  // 生成 XML 格式报告 (可被其他工具使用)
+        html.required = true // 生成 HTML 格式报告
+        // 指定 HTML 报告的输出目录
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco/testDebugUnitTestReport/html')
+    }
+
+    // 定义哪些类文件需要计算覆盖率
+    // 需要根据 Android Gradle 插件 (AGP) 版本调整路径
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*', '**/*Activity.*', '**/*Fragment.*', '**/*Adapter.*', '**/DateHelper$DateFormats*.*'] // 过滤掉不需覆盖的类, 包括内部枚举类
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug/classes", excludes: fileFilter) // Java 类文件路径 (需确认!)
+    def mainSrc = files(["${project.projectDir}/src/main/java"]) // 源代码目录
+
+    sourceDirectories.setFrom(mainSrc)
+    classDirectories.setFrom(files([debugTree]))
+
+    // 指定 JaCoCo 执行数据 (.exec) 文件位置 (需确认!)
+    executionData.setFrom(fileTree(dir: buildDir, includes: ['outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec', 'jacoco/testDebugUnitTest.exec']))
+
+    // 如果找不到 .exec 文件, 可以在这里打印路径帮助调试:
+    // doFirst { println "Searching for .exec files in ${buildDir}" }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    testImplementation 'org.mockito:mockito-core:3.12.4'
+    testImplementation 'androidx.test:core:1.4.0'
+    testImplementation 'org.mockito:mockito-inline:3.12.4'
+
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+//pitest {
+//    targetClasses = ['com.kxzhu.datehelper.DateHelper']
+//    targetTests = ['com.kxzhu.datehelper.DateHelperTest']
+//}

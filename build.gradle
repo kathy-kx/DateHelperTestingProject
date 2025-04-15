@@ -1,0 +1,29 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal() // 保留这些仓库
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.3.0" // 你的 AGP 版本
+        // **在这里添加 PIT 插件的 classpath 依赖**
+//        classpath "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.15.0" // 使用我们之前确定的版本
+    }
+}
+plugins {
+    id 'com.android.application' version '7.3.0' apply false
+    id 'com.android.library' version '7.3.0' apply false
+}
+
+//allprojects {
+//    repositories {
+//        google()
+//        mavenCentral()
+//    }
+//}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
