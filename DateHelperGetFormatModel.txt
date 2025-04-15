@@ -1,0 +1,4 @@
+# Model for getDesiredFormat(DateFormat, long)
+
+Output_Format: D_YYYYMMDD, S_DDMMyyHHMMA, D_DDMMYYYY_N, HHMMSSA, NULL_FORMAT
+Timestamp_Val: NOW, PAST, ZERO, FUTURE

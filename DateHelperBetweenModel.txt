@@ -1,0 +1,5 @@
+# Model for getDays/Hours/MinutesBetweenTwoDate methods
+
+Date_Format: D_YYYYMMDD, S_DDMMyyHHMMA, D_DDMMYYYY_N, HHMM, NULL_FORMAT
+Old_Date_Str: "2025-04-10", "14/04/25, 10:00AM", "18-Apr-2025", "15:30", "invalid-old", NULL_STR
+New_Date_Str: "2025-04-14", "10/03/25, 08:00PM", "20-May-2025", "09:00", "invalid-new", NULL_STR

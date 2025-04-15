@@ -1,0 +1,4 @@
+# Model for parseDate(String, DateFormat)
+
+Input_String: "2025-04-14", "14/04/25, 10:00AM", "14-Apr-2025", "15:30", "yy-MM-dd", "bad-string", NULL_STR
+Parse_Format: D_YYYYMMDD, S_DDMMyyHHMMA, D_DDMMYYYY_N, HHMM, S_YYMMDD, NULL_FORMAT
